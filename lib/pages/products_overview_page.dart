@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:loja/models/product.dart';
 
+import '../components/product_item.dart';
 import '../data/dummy_data.dart';
 
 class ProductsOverviewPage extends StatelessWidget {
@@ -24,7 +25,9 @@ class ProductsOverviewPage extends StatelessWidget {
                 mainAxisSpacing: 10, //espaçamento no eixo horizontal
               ),
               itemBuilder: (ctx, i) {
-                return Text(loadedProducts[i].title);
+                return ProductItem(
+                  product: dummyProducts[i],
+                );
               }),
         ));
   }
