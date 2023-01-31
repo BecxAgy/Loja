@@ -12,8 +12,6 @@ import '../data/dummy_data.dart';
 class ProductsOverviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<ProductList>(context);
-    final List<Product> loadedProducts = provider.items;
     return Scaffold(
         appBar: AppBar(
           title: Text("Minha Loja"),
