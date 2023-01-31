@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:loja/pages/product_details_page.dart';
 import 'package:loja/pages/products_overview_page.dart';
+import 'package:loja/utils/app_routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,10 +16,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          primarySwatch: Colors.purple, accentColor: Colors.deepOrange),
       home: ProductsOverviewPage(),
       debugShowCheckedModeBanner: false,
+      routes: {
+        AppRoutes.ProductDetails: (ctx) => ProductDetailPage(),
+      },
     );
   }
 }
