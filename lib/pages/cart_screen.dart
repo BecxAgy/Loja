@@ -18,7 +18,7 @@ class CartScreen extends StatelessWidget {
       body: Column(
         children: [
           Card(
-            margin: EdgeInsets.all(25),
+            margin: EdgeInsets.symmetric(horizontal: 15, vertical: 25),
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
