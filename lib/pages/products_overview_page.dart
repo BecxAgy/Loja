@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:loja/models/product_list.dart';
+import 'package:loja/utils/app_routes.dart';
 import 'package:provider/provider.dart';
-
+import 'package:loja/components/badge.dart';
 import '../components/product_grid.dart';
+import '../models/cart.dart';
 
 enum FilterOptions { Favorite, All }
 
@@ -41,6 +42,17 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
                   }
                 });
               },
+            ),
+            Consumer<Cart>(
+              builder: (ctx, cart, child) => BadgeH(
+                value: cart.itemCount.toString(),
+                child: IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(AppRoutes.CART);
+                  },
+                ),
+              ),
             )
           ],
         ),
