@@ -1,38 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:loja/models/product_list.dart';
-import 'package:loja/pages/cart_screen.dart';
-import 'package:loja/pages/product_details_page.dart';
 import 'package:loja/pages/products_overview_page.dart';
 import 'package:loja/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 
 import 'models/cart.dart';
+import 'models/order_list.dart';
+import 'models/product_list.dart';
+import 'pages/cart_page.dart';
+import 'pages/orders_page.dart';
+import 'pages/product_detail_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ProductList()),
-        ChangeNotifierProvider(create: (_) => Cart()),
+        ChangeNotifierProvider(
+          create: (_) => ProductList(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Cart(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => OrderList(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-            primarySwatch: Colors.purple, accentColor: Colors.deepOrange),
-        home: ProductsOverviewPage(),
-        debugShowCheckedModeBanner: false,
+          colorScheme: ColorScheme.fromSwatch().copyWith(
+            primary: Colors.purple,
+            secondary: Colors.deepOrange,
+          ),
+          fontFamily: 'Lato',
+        ),
+        // home: const ProductsOverviewPage(),
         routes: {
-          AppRoutes.ProductDetails: (ctx) => ProductDetailPage(),
-          AppRoutes.CART: (ctx) => CartScreen(),
+          AppRoutes.HOME: (ctx) => const ProductsOverviewPage(),
+          AppRoutes.ProductDetails: (ctx) => const ProductDetailPage(),
+          AppRoutes.CART: (ctx) => const CartPage(),
+          AppRoutes.ORDERS: (ctx) => const OrdersPage(),
         },
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

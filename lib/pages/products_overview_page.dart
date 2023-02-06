@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:loja/utils/app_routes.dart';
 import 'package:provider/provider.dart';
-import 'package:loja/components/badge.dart';
+import '../components/app_drawer.dart';
+import '../components/badge.dart';
 import '../components/product_grid.dart';
 import '../models/cart.dart';
+import '../utils/app_routes.dart';
 
-enum FilterOptions { Favorite, All }
+enum FilterOptions {
+  favorite,
+  all,
+}
 
 class ProductsOverviewPage extends StatefulWidget {
-  const ProductsOverviewPage({super.key});
+  const ProductsOverviewPage({Key? key}) : super(key: key);
 
   @override
   State<ProductsOverviewPage> createState() => _ProductsOverviewPageState();
@@ -16,49 +20,51 @@ class ProductsOverviewPage extends StatefulWidget {
 
 class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
   bool _showFavoriteOnly = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Minha Loja"),
-          actions: [
-            PopupMenuButton(
-              itemBuilder: (_) => [
-                PopupMenuItem(
-                  child: Text("Somente Favoritos"),
-                  value: FilterOptions.Favorite,
-                ),
-                PopupMenuItem(
-                  child: Text("Todos"),
-                  value: FilterOptions.All,
-                )
-              ],
-              onSelected: (FilterOptions option) {
-                setState(() {
-                  if (option == FilterOptions.Favorite) {
-                    _showFavoriteOnly = true;
-                  } else {
-                    _showFavoriteOnly = false;
-                  }
-                });
-              },
-            ),
-            Consumer<Cart>(
-              builder: (ctx, cart, child) => BadgeH(
-                value: cart.itemCount.toString(),
-                child: IconButton(
-                  icon: Icon(Icons.shopping_cart),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(AppRoutes.CART);
-                  },
-                ),
+      appBar: AppBar(
+        title: const Text('Minha Loja'),
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert),
+            itemBuilder: (_) => [
+              const PopupMenuItem(
+                value: FilterOptions.favorite,
+                child: Text('Somente Favoritos'),
               ),
-            )
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: ProductGrid(_showFavoriteOnly),
-        ));
+              const PopupMenuItem(
+                value: FilterOptions.all,
+                child: Text('Todos'),
+              ),
+            ],
+            onSelected: (FilterOptions selectedValue) {
+              setState(() {
+                if (selectedValue == FilterOptions.favorite) {
+                  _showFavoriteOnly = true;
+                } else {
+                  _showFavoriteOnly = false;
+                }
+              });
+            },
+          ),
+          Consumer<Cart>(
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoutes.CART);
+              },
+              icon: const Icon(Icons.shopping_cart),
+            ),
+            builder: (ctx, cart, child) => BadgeWidget(
+              value: cart.itemsCount.toString(),
+              child: child!,
+            ),
+          ),
+        ],
+      ),
+      body: ProductGrid(_showFavoriteOnly),
+      drawer: const AppDrawer(),
+    );
   }
 }

@@ -1,53 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
 import '../models/cart.dart';
 import '../models/cart_item.dart';
 
 class CartItemWidget extends StatelessWidget {
-  final CartItem item;
+  final CartItem cartItem;
 
-  CartItemWidget(this.item);
+  const CartItemWidget(this.cartItem, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: ValueKey(item.id),
+      key: ValueKey(cartItem.id),
       direction: DismissDirection.endToStart,
       background: Container(
+        color: Theme.of(context).errorColor,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
-        color: Theme.of(context).errorColor,
-        child: Icon(
-          Icons.delete,
-          size: 35,
-          color: Colors.white,
+        margin: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 4,
         ),
-        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
+        child: const Icon(
+          Icons.delete,
+          color: Colors.white,
+          size: 40,
+        ),
       ),
       onDismissed: (_) {
-        Provider.of<Cart>(context, listen: false).removeItem(item.productId);
+        Provider.of<Cart>(
+          context,
+          listen: false,
+        ).removeItem(cartItem.productId);
       },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Card(
-          margin: EdgeInsets.symmetric(horizontal: 15, vertical: 2),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: ListTile(
-              leading: CircleAvatar(
-                  child: Padding(
-                padding: const EdgeInsets.all(5.0),
+      child: Card(
+        margin: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 4,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(5),
                 child: FittedBox(
-                  child: Text("${item.price}"),
+                  child: Text('${cartItem.price}'),
                 ),
-              )),
-              title: Text(item.title),
-              subtitle: Text("R\$ ${item.price * item.quantity}"),
-              trailing: Text("${item.quantity}x"),
+              ),
             ),
+            title: Text(cartItem.name),
+            subtitle: Text('Total: R\$ ${cartItem.price * cartItem.quantity}'),
+            trailing: Text('${cartItem.quantity}x'),
           ),
         ),
       ),
