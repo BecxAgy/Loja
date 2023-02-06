@@ -32,11 +32,24 @@ class ProductItem extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           trailing: IconButton(
-            onPressed: () {
-              cart.addItem(product);
-            },
             icon: const Icon(Icons.shopping_cart),
             color: Theme.of(context).colorScheme.secondary,
+            onPressed: () {
+              cart.addItem(product);
+
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  "Produto adicionado com sucessor!",
+                ),
+                duration: Duration(seconds: 3),
+                action: SnackBarAction(
+                  label: "DESFAZER",
+                  onPressed: () {
+                    cart.removeSingleItem(product.id);
+                  },
+                ),
+              ));
+            },
           ),
         ),
         child: GestureDetector(
