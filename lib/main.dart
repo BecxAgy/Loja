@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja/pages/product_form_page.dart';
 import 'package:loja/pages/product_page.dart';
 import 'package:loja/pages/products_overview_page.dart';
 import 'package:loja/utils/app_routes.dart';
@@ -35,19 +36,19 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch().copyWith(
-            primary: Colors.purple,
-            secondary: Colors.deepOrange,
-          ),
-          fontFamily: 'Lato',
-        ),
+            colorScheme: ColorScheme.fromSwatch().copyWith(
+              primary: Colors.purple,
+              secondary: Colors.deepOrange,
+            ),
+            primaryColor: Colors.purple),
         // home: const ProductsOverviewPage(),
         routes: {
           AppRoutes.HOME: (ctx) => const ProductsOverviewPage(),
           AppRoutes.ProductDetails: (ctx) => const ProductDetailPage(),
           AppRoutes.CART: (ctx) => const CartPage(),
           AppRoutes.ORDERS: (ctx) => const OrdersPage(),
-          AppRoutes.PRODUCTS: (ctx) => ProductsPage()
+          AppRoutes.PRODUCTS: (ctx) => ProductsPage(),
+          AppRoutes.PRODUCT_FORM: (ctx) => ProductFormPage()
         },
         debugShowCheckedModeBanner: false,
       ),
