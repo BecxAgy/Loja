@@ -41,7 +41,7 @@ class ProductItem extends StatelessWidget {
                 content: Text(
                   "Produto adicionado com sucessor!",
                 ),
-                duration: Duration(seconds: 3),
+                duration: Duration(seconds: 2),
                 action: SnackBarAction(
                   label: "DESFAZER",
                   onPressed: () {
