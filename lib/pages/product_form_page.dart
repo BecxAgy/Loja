@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:loja/models/product_list.dart';
+import 'package:provider/provider.dart';
 import '../models/product.dart';
 
 class ProductFormPage extends StatefulWidget {
@@ -65,11 +67,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
       imageUrl: _formData['imageUrl'] as String,
     );
 
-    print(newProduct.id);
-    print(newProduct.name);
-    print(newProduct.description);
-    print(newProduct.price);
-    print(newProduct.imageUrl);
+    Provider.of<ProductList>(context, listen: false).addProduct(newProduct);
+    Navigator.of(context).pop();
   }
 
   @override
