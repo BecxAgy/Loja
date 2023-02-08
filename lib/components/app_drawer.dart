@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../utils/app_routes.dart';
+import 'package:loja/utils/app_routes.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -37,7 +36,7 @@ class AppDrawer extends StatelessWidget {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.edit),
-            title: const Text('Gerenciamento de Produtos'),
+            title: const Text('Gerenciar Produtos'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(
                 AppRoutes.PRODUCTS,

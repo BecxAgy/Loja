@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../models/cart.dart';
-import '../models/cart_item.dart';
+import 'package:loja/models/cart.dart';
+import 'package:loja/models/cart_item.dart';
 
 class CartItemWidget extends StatelessWidget {
   final CartItem cartItem;
@@ -30,23 +29,26 @@ class CartItemWidget extends StatelessWidget {
       ),
       confirmDismiss: (_) {
         return showDialog<bool>(
-            context: context,
-            builder: (ctx) => AlertDialog(
-                  title: Text("Tem certeza"),
-                  content: Text("Deseja remover esse produto?"),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(ctx).pop(false);
-                        },
-                        child: Text("Não")),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(ctx).pop(true);
-                        },
-                        child: Text("Sim")),
-                  ],
-                ));
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Tem Certeza?'),
+            content: const Text('Quer remover o item do carrinho?'),
+            actions: [
+              TextButton(
+                child: const Text('Não'),
+                onPressed: () {
+                  Navigator.of(ctx).pop(false);
+                },
+              ),
+              TextButton(
+                child: const Text('Sim'),
+                onPressed: () {
+                  Navigator.of(ctx).pop(true);
+                },
+              ),
+            ],
+          ),
+        );
       },
       onDismissed: (_) {
         Provider.of<Cart>(
