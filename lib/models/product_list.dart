@@ -10,7 +10,7 @@ import 'package:loja/utils/constants.dart';
 class ProductList with ChangeNotifier {
   final _baseUrl = Constants.productBaseUrl;
 
-  final List<Product> _items = dummyProducts;
+  final List<Product> _items = [];
 
   List<Product> get items => [..._items];
   List<Product> get favoriteItems =>
@@ -18,6 +18,43 @@ class ProductList with ChangeNotifier {
 
   int get itemsCount {
     return _items.length;
+  }
+
+  Future<void> updateProduct(Product product) async {
+    var index = _items.indexWhere((p) => p.id == product.id);
+
+    if (index >= 0) {
+      await http.patch(Uri.parse('$_baseUrl/${product.id}.json'),
+          body: jsonEncode({
+            "name": product.name,
+            "description": product.description,
+            "price": product.price,
+            "imageUrl": product.imageUrl,
+          }));
+
+      _items[index] = product;
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadProducts() async {
+    _items.clear();
+    var response = await http.get(Uri.parse('$_baseUrl.json'));
+
+    Map<String, dynamic> data = jsonDecode(response.body);
+
+    if (response.body == 'null') return;
+
+    data.forEach((id, dataProduct) {
+      _items.add(Product(
+          id: id,
+          name: dataProduct['name'],
+          description: dataProduct['description'],
+          price: dataProduct['price'],
+          imageUrl: dataProduct['imageUrl'],
+          isFavorite: dataProduct['isFavorite']));
+    });
+    notifyListeners();
   }
 
   Future<void> saveProduct(Map<String, Object> data) {
@@ -38,9 +75,9 @@ class ProductList with ChangeNotifier {
     }
   }
 
-  Future<void> addProduct(Product product) {
-    final future = http.post(
-      Uri.parse('$_baseUrl/products.json'),
+  Future<void> addProduct(Product product) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl.json'),
       body: jsonEncode(
         {
           "name": product.name,
@@ -51,38 +88,32 @@ class ProductList with ChangeNotifier {
         },
       ),
     );
-
-    return future.then<void>((response) {
-      final id = jsonDecode(response.body)['name'];
-      _items.add(Product(
-        id: id,
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        isFavorite: product.isFavorite,
-      ));
-      notifyListeners();
-    });
+    final id = jsonDecode(response.body)['name'];
+    _items.add(Product(
+      id: id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+      isFavorite: product.isFavorite,
+    ));
+    notifyListeners();
   }
 
-  Future<void> updateProduct(Product product) {
+  Future<void> removeProduct(Product product) async {
     int index = _items.indexWhere((p) => p.id == product.id);
 
     if (index >= 0) {
-      _items[index] = product;
+      _items.remove(product);
       notifyListeners();
-    }
 
-    return Future.value();
-  }
+      var response =
+          await http.delete(Uri.parse('$_baseUrl/${product.id}.json'));
 
-  void removeProduct(Product product) {
-    int index = _items.indexWhere((p) => p.id == product.id);
-
-    if (index >= 0) {
-      _items.removeWhere((p) => p.id == product.id);
-      notifyListeners();
+      if (response.statusCode >= 400) {
+        _items.insert(index, product);
+        notifyListeners();
+      }
     }
   }
 }
