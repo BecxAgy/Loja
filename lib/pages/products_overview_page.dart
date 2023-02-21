@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:loja/models/product_list.dart';
 import 'package:provider/provider.dart';
 import 'package:loja/components/app_drawer.dart';
 import 'package:loja/components/badge.dart';
 import 'package:loja/components/product_grid.dart';
 import 'package:loja/models/cart.dart';
+import 'package:loja/models/product_list.dart';
 import 'package:loja/utils/app_routes.dart';
 
 enum FilterOptions {
@@ -21,18 +21,17 @@ class ProductsOverviewPage extends StatefulWidget {
 
 class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
   bool _showFavoriteOnly = false;
-  bool isLoading = false;
+  bool _isLoading = true;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
-    Provider.of<ProductList>(context, listen: false)
-        .loadProducts()
-        .then((value) {
+    Provider.of<ProductList>(
+      context,
+      listen: false,
+    ).loadProducts().then((value) {
       setState(() {
-        isLoading = false;
+        _isLoading = false;
       });
     });
   }
@@ -68,7 +67,7 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
           Consumer<Cart>(
             child: IconButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(AppRoutes.CART);
+                Navigator.of(context).pushNamed(AppRoutes.cart);
               },
               icon: const Icon(Icons.shopping_cart),
             ),
@@ -79,10 +78,8 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
           ),
         ],
       ),
-      body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
           : ProductGrid(_showFavoriteOnly),
       drawer: const AppDrawer(),
     );
